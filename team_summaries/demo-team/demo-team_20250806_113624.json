@@ -1,0 +1,19 @@
+{
+  "summary": "Second meeting - progress review",
+  "tasks": [
+    {
+      "task": "Review wireframes",
+      "assignee": "Team",
+      "status": "assigned"
+    }
+  ],
+  "participants": [
+    "Sarah",
+    "Lisa",
+    "Mike",
+    "David"
+  ],
+  "team_id": "demo-team",
+  "date": "2025-08-06T11:36:24.694048",
+  "filename": "demo-team_20250806_113624.json"
+}

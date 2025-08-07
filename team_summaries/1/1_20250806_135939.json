@@ -1,0 +1,62 @@
+{
+  "summary": "The marketing team reviewed the Q1 campaign progress, discussed budget allocation, and planned for the upcoming product launch. Key decisions included moving forward with a new landing page design, postponing the email marketing campaign, and scheduling a budget review meeting.",
+  "participants": [
+    "John Smith",
+    "Sarah Johnson",
+    "Mike Davis",
+    "Lisa Chen"
+  ],
+  "key_decisions": [
+    "Move forward with the new landing page design.",
+    "Postpone the email marketing campaign until after the landing page deployment.",
+    "Schedule a budget review meeting for Thursday afternoon."
+  ],
+  "tasks": [
+    {
+      "task": "Coordinate with the development team to deploy the new landing page design.",
+      "assignee": "Lisa Chen",
+      "due_date": "Next Tuesday",
+      "priority": "high",
+      "status": "assigned"
+    },
+    {
+      "task": "Prepare the campaign performance report.",
+      "assignee": "Sarah Johnson",
+      "due_date": "Next Friday",
+      "priority": "high",
+      "status": "assigned"
+    },
+    {
+      "task": "Prepare a detailed breakdown of current Q1 marketing expenses.",
+      "assignee": "Sarah Johnson",
+      "due_date": "Wednesday evening",
+      "priority": "high",
+      "status": "assigned"
+    },
+    {
+      "task": "Help Sarah with the technical metrics for the campaign performance report.",
+      "assignee": "Mike Davis",
+      "due_date": "Next Friday",
+      "priority": "medium",
+      "status": "assigned"
+    }
+  ],
+  "action_items": [
+    "Lisa to coordinate with the development team for landing page deployment.",
+    "Sarah to prepare the campaign performance report and budget breakdown.",
+    "John to schedule a budget review meeting.",
+    "Postpone the email marketing campaign until after the landing page deployment."
+  ],
+  "next_meeting": "Thursday afternoon",
+  "topics_discussed": [
+    "Q1 campaign progress",
+    "Budget allocation",
+    "Upcoming product launch",
+    "Landing page optimization",
+    "Campaign performance report",
+    "Q1 marketing expenses"
+  ],
+  "team_id": "1",
+  "date": "2025-08-06T13:59:39.301078",
+  "filename": "1_20250806_135939.json"
+}

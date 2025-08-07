@@ -1,0 +1,46 @@
+{
+  "summary": "The meeting focused on the progress of the marketing campaign, finalizing the budget, and moving forward with the new design proposal. Tasks were assigned, and deadlines were set.",
+  "participants": [
+    "John Smith",
+    "Sarah Johnson",
+    "Mike Davis"
+  ],
+  "key_decisions": [
+    "Finalize the budget for the marketing campaign by Friday.",
+    "Move forward with the new design proposal."
+  ],
+  "tasks": [
+    {
+      "task": "Finalize the budget for the marketing campaign.",
+      "assignee": "Sarah Johnson",
+      "due_date": "Friday",
+      "priority": "high",
+      "status": "assigned"
+    },
+    {
+      "task": "Coordinate with the design team.",
+      "assignee": "Sarah Johnson",
+      "due_date": "This week",
+      "priority": "medium",
+      "status": "assigned"
+    },
+    {
+      "task": "Handle the technical implementation.",
+      "assignee": "Mike Davis",
+      "due_date": "Next Tuesday",
+      "priority": "high",
+      "status": "assigned"
+    }
+  ],
+  "action_items": [
+    "Sarah Johnson to finalize the budget.",
+    "Sarah Johnson to coordinate with the design team.",
+    "Mike Davis to handle the technical implementation."
+  ],
+  "next_meeting": "Not specified",
+  "topics_discussed": [
+    "Marketing campaign progress",
+    "Budget finalization",
+    "New design proposal"
+  ]
+}

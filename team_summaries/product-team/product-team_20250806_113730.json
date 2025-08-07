@@ -1,0 +1,23 @@
+{
+  "summary": "Morning standup - discussed sprint progress",
+  "tasks": [
+    {
+      "task": "Complete API integration",
+      "assignee": "Mike",
+      "status": "in-progress"
+    },
+    {
+      "task": "Review wireframes",
+      "assignee": "Lisa",
+      "status": "assigned"
+    }
+  ],
+  "participants": [
+    "Sarah",
+    "Lisa",
+    "Mike"
+  ],
+  "team_id": "product-team",
+  "date": "2025-08-06T11:37:30.393746",
+  "filename": "product-team_20250806_113730.json"
+}

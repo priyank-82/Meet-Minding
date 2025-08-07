@@ -1,0 +1,6 @@
+fastmcp
+boto3
+flask
+flask-cors
+requests
+httpx

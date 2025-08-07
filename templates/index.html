@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Transcript Processor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Meeting Transcript Processor</h1>
+            <p>AI-powered meeting analysis with task extraction and summarization</p>
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span>Ready</span>
+            </div>
+        </div>
+        
+        <div class="input-section">
+            <h2>Upload Meeting Transcript</h2>
+            
+            <div class="team-section">
+                <h3>👥 Team Information</h3>
+                <div class="team-input">
+                    <label for="teamIdInput">Team ID (optional):</label>
+                    <input type="text" id="teamIdInput" placeholder="e.g., product-team, engineering-core, marketing..." />
+                    <small>Enter a team ID to track meeting history and follow-up tasks</small>
+                </div>
+            </div>
+            
+            <div class="upload-options">
+                <div class="upload-method">
+                    <h3>📄 Upload File</h3>
+                    <input type="file" id="fileInput" accept=".txt,.md,.doc,.docx" />
+                    <button id="uploadButton" class="upload-btn">Upload & Process</button>
+                </div>
+                
+                <div class="upload-method">
+                    <h3>📝 Paste Text</h3>
+                    <textarea id="transcriptInput" placeholder="Paste your meeting transcript here..." rows="8"></textarea>
+                    <button id="processButton" class="process-btn">Process Transcript</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <h2>Analysis Results</h2>
+            
+            <div class="result-section">
+                <h3>📋 Summary</h3>
+                <div id="summaryResult" class="result-content"></div>
+            </div>
+            
+            <div class="result-section">
+                <h3>👥 Participants</h3>
+                <div id="participantsResult" class="result-content"></div>
+            </div>
+            
+            <div class="result-section">
+                <h3>✅ Action Items & Tasks</h3>
+                <div id="tasksResult" class="result-content"></div>
+            </div>
+            
+            <div class="result-section">
+                <h3>🎯 Key Decisions</h3>
+                <div id="decisionsResult" class="result-content"></div>
+            </div>
+            
+            <div class="result-section">
+                <h3>💬 Topics Discussed</h3>
+                <div id="topicsResult" class="result-content"></div>
+            </div>
+            
+            <div class="export-section">
+                <h3>📤 Export Results</h3>
+                <div class="export-buttons">
+                    <button id="exportJson" class="export-btn">📄 JSON</button>
+                    <button id="exportMarkdown" class="export-btn">📝 Markdown</button>
+                    <button id="exportText" class="export-btn">📄 Text</button>
+                    <button id="saveToS3" class="export-btn s3-btn">☁️ Save to S3</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loadingIndicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Processing transcript...</p>
+        </div>
+        
+        <div class="footer">
+            <p>Powered by Amazon Bedrock Nova Lite</p>
+        </div>
+    </div>
+
+    <script>
+        let lastAnalysisResult = null;
+        let currentTeamId = null;
+
+        // File upload handling
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const teamId = document.getElementById('teamIdInput').value.trim();
+            
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            if (teamId) {
+                formData.append('team_id', teamId);
+            }
+            
+            processTranscript('/upload_transcript', formData);
+        });
+
+        // Text processing handling
+        document.getElementById('processButton').addEventListener('click', function() {
+            const transcript = document.getElementById('transcriptInput').value.trim();
+            const teamId = document.getElementById('teamIdInput').value.trim();
+            
+            if (!transcript) {
+                alert('Please enter a transcript');
+                return;
+            }
+            
+            const data = JSON.stringify({ 
+                transcript: transcript,
+                team_id: teamId || null
+            });
+            processTranscript('/process_transcript', data, 'application/json');
+        });
+
+        function processTranscript(endpoint, data, contentType = null) {
+            showLoading(true);
+            updateStatus('Processing...');
+            
+            const fetchOptions = {
+                method: 'POST',
+                body: data
+            };
+            
+            if (contentType) {
+                fetchOptions.headers = {
+                    'Content-Type': contentType
+                };
+            }
+            
+            fetch(endpoint, fetchOptions)
+                .then(response => response.json())
+                .then(data => {
+                    showLoading(false);
+                    
+                    if (data.status === 'success') {
+                        lastAnalysisResult = data.result;
+                        currentTeamId = data.team_id;
+                        displayResults(data.result, data.team_id);
+                        updateStatus('Analysis Complete');
+                    } else {
+                        updateStatus('Error');
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    showLoading(false);
+                    updateStatus('Error');
+                    console.error('Error:', error);
+                    alert('Error processing transcript: ' + error.message);
+                });
+        }
+
+        function displayResults(result, teamId = null) {
+            // Show results container
+            document.getElementById('resultsContainer').style.display = 'block';
+            
+            // Add team context indicator if team_id was used
+            let teamContextHtml = '';
+            if (teamId) {
+                teamContextHtml = `
+                    <div class="team-context-indicator">
+                        <span class="context-icon">🔗</span>
+                        <strong>Team Context Applied:</strong> Analysis includes context from previous ${teamId} meetings
+                    </div>
+                `;
+            }
+            
+            // Display summary with team context
+            document.getElementById('summaryResult').innerHTML = 
+                teamContextHtml + `<p>${result.summary || 'No summary available'}</p>`;
+            
+            // Display participants
+            const participants = result.participants || [];
+            document.getElementById('participantsResult').innerHTML = 
+                participants.length > 0 ? 
+                `<ul>${participants.map(p => `<li>${p}</li>`).join('')}</ul>` :
+                '<p>No participants identified</p>';
+            
+            // Display tasks with enhanced status indicators
+            const tasks = result.tasks || [];
+            let tasksHtml = '';
+            if (tasks.length > 0) {
+                tasksHtml = '<div class="tasks-list">';
+                tasks.forEach((task, index) => {
+                    const statusClass = getStatusClass(task.status);
+                    tasksHtml += `
+                        <div class="task-item ${statusClass}">
+                            <h4>Task ${index + 1} <span class="status-badge ${statusClass}">${task.status}</span></h4>
+                            <p><strong>Description:</strong> ${task.task}</p>
+                            <p><strong>Assignee:</strong> ${task.assignee}</p>
+                            <p><strong>Due Date:</strong> ${task.due_date}</p>
+                            <p><strong>Priority:</strong> ${task.priority}</p>
+                        </div>
+                    `;
+                });
+                tasksHtml += '</div>';
+            } else {
+                tasksHtml = '<p>No tasks identified</p>';
+            }
+            document.getElementById('tasksResult').innerHTML = tasksHtml;
+            
+            // Display decisions
+            const decisions = result.key_decisions || [];
+            document.getElementById('decisionsResult').innerHTML = 
+                decisions.length > 0 ? 
+                `<ul>${decisions.map(d => `<li>${d}</li>`).join('')}</ul>` :
+                '<p>No key decisions identified</p>';
+            
+            // Display topics
+            const topics = result.topics_discussed || [];
+            document.getElementById('topicsResult').innerHTML = 
+                topics.length > 0 ? 
+                `<div class="topics-tags">${topics.map(t => `<span class="topic-tag">${t}</span>`).join('')}</div>` :
+                '<p>No specific topics identified</p>';
+        }
+        
+        function getStatusClass(status) {
+            switch(status?.toLowerCase()) {
+                case 'completed': return 'status-completed';
+                case 'in-progress': return 'status-in-progress';
+                case 'assigned': return 'status-assigned';
+                case 'pending': return 'status-pending';
+                default: return 'status-default';
+            }
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingIndicator').style.display = show ? 'block' : 'none';
+        }
+
+        function updateStatus(status) {
+            document.getElementById('statusIndicator').querySelector('span:last-child').textContent = status;
+        }
+
+        // Export functionality
+        document.getElementById('exportJson').addEventListener('click', function() {
+            if (lastAnalysisResult) {
+                downloadFile(JSON.stringify(lastAnalysisResult, null, 2), 'meeting-analysis.json', 'application/json');
+            }
+        });
+
+        document.getElementById('exportMarkdown').addEventListener('click', function() {
+            if (lastAnalysisResult) {
+                let markdown = generateMarkdown(lastAnalysisResult);
+                downloadFile(markdown, 'meeting-analysis.md', 'text/markdown');
+            }
+        });
+
+        document.getElementById('exportText').addEventListener('click', function() {
+            if (lastAnalysisResult) {
+                let text = generateTextReport(lastAnalysisResult);
+                downloadFile(text, 'meeting-analysis.txt', 'text/plain');
+            }
+        });
+
+        document.getElementById('saveToS3').addEventListener('click', function() {
+            if (lastAnalysisResult) {
+                // Show a message that this functionality is not implemented yet
+                alert('Save to S3 functionality is not yet implemented.\n\nThis button will eventually save the meeting analysis results to Amazon S3 for cloud storage and sharing.');
+            } else {
+                alert('No analysis results to save. Please process a meeting transcript first.');
+            }
+        });
+
+        function generateMarkdown(result) {
+            let md = `# Meeting Analysis Report\n\n`;
+            md += `## Summary\n${result.summary}\n\n`;
+            md += `## Participants\n${(result.participants || []).map(p => `- ${p}`).join('\n')}\n\n`;
+            md += `## Key Decisions\n${(result.key_decisions || []).map(d => `- ${d}`).join('\n')}\n\n`;
+            md += `## Action Items\n`;
+            (result.tasks || []).forEach((task, i) => {
+                md += `${i + 1}. **${task.task}**\n`;
+                md += `   - Assignee: ${task.assignee}\n`;
+                md += `   - Due Date: ${task.due_date}\n`;
+                md += `   - Priority: ${task.priority}\n\n`;
+            });
+            md += `## Topics Discussed\n${(result.topics_discussed || []).map(t => `- ${t}`).join('\n')}\n`;
+            return md;
+        }
+
+        function generateTextReport(result) {
+            let text = `MEETING ANALYSIS REPORT\n${'='.repeat(25)}\n\n`;
+            text += `Summary: ${result.summary}\n\n`;
+            text += `Participants: ${(result.participants || []).join(', ')}\n\n`;
+            text += `Key Decisions:\n${(result.key_decisions || []).map((d, i) => `${i + 1}. ${d}`).join('\n')}\n\n`;
+            text += `Action Items:\n`;
+            (result.tasks || []).forEach((task, i) => {
+                text += `${i + 1}. ${task.task} (Assigned to: ${task.assignee})\n`;
+            });
+            text += `\nTopics Discussed: ${(result.topics_discussed || []).join(', ')}\n`;
+            return text;
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

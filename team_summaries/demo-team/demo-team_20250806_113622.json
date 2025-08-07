@@ -1,0 +1,18 @@
+{
+  "summary": "First meeting - planning session",
+  "tasks": [
+    {
+      "task": "Create wireframes",
+      "assignee": "Lisa",
+      "status": "assigned"
+    }
+  ],
+  "participants": [
+    "Sarah",
+    "Lisa",
+    "Mike"
+  ],
+  "team_id": "demo-team",
+  "date": "2025-08-06T11:36:22.688673",
+  "filename": "demo-team_20250806_113622.json"
+}

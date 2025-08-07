@@ -1,0 +1,31 @@
+Marketing Team Weekly Meeting - January 15, 2024
+
+John Smith: Good morning everyone, let's start today's marketing review meeting. We have several items to discuss including the Q1 campaign progress, budget allocation, and the upcoming product launch.
+
+Sarah Johnson: Thanks John. I wanted to update everyone on the progress of our digital marketing campaign. We've seen a 15% increase in engagement over the past two weeks. However, we need to finalize the budget allocation for the social media ads by this Friday.
+
+Mike Davis: That's great news Sarah. On the technical side, I've been working on the landing page optimization. The new design is ready for review. I think we should implement the changes before the product launch next month.
+
+Lisa Chen: I agree with Mike. The new design looks much better. I'll coordinate with the development team to get this deployed. Can we set a deadline for next Tuesday?
+
+John Smith: Excellent. So we have decided to move forward with the new landing page design. Lisa, you'll take the lead on coordinating with development, and we need this completed by next Tuesday.
+
+Sarah Johnson: Perfect. I'll also need to prepare the campaign performance report for the executive team. The deadline for that is next Friday.
+
+Mike Davis: I can help Sarah with the technical metrics for the report. Also, we decided earlier that we should increase the social media budget by 20% for the next quarter.
+
+Lisa Chen: Speaking of budget, we need to review the Q1 marketing expenses. I noticed we're slightly over budget on the paid advertising front.
+
+John Smith: Good point Lisa. Let's schedule a separate budget review meeting for Thursday afternoon. Sarah, can you prepare a detailed breakdown of our current spending?
+
+Sarah Johnson: Absolutely. I'll have that ready by Wednesday evening.
+
+John Smith: Great. To summarize today's decisions: we're moving forward with the new landing page design with Lisa coordinating deployment by Tuesday, Sarah will prepare both the campaign report and budget breakdown, and we'll meet again Thursday for the budget review.
+
+Mike Davis: One more thing - should we postpone the email marketing campaign until after the landing page is live?
+
+Lisa Chen: That makes sense. Let's hold off on the email campaign until the new page is deployed.
+
+John Smith: Agreed. The email campaign will be postponed until after the landing page deployment. I think that covers everything for today. Thank you everyone for the productive meeting.
+
+Meeting ended at 10:45 AM.

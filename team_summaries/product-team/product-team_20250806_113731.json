@@ -1,0 +1,24 @@
+{
+  "summary": "Afternoon planning - Q4 roadmap discussion",
+  "tasks": [
+    {
+      "task": "Create mobile mockups",
+      "assignee": "Lisa",
+      "status": "assigned"
+    },
+    {
+      "task": "Database optimization",
+      "assignee": "Mike",
+      "status": "assigned"
+    }
+  ],
+  "participants": [
+    "Sarah",
+    "Lisa",
+    "Mike",
+    "David"
+  ],
+  "team_id": "product-team",
+  "date": "2025-08-06T11:37:31.400404",
+  "filename": "product-team_20250806_113731.json"
+}
